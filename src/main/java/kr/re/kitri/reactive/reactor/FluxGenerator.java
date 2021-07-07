@@ -6,72 +6,82 @@ import reactor.core.publisher.BaseSubscriber;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SynchronousSink;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class FluxGenerator {
 
     public Flux<String> fromArray() {
-        return null;
+        String[] strings = new String[] {"a", "b", "c", "d"};
+        return Flux.fromArray(strings);
     }
 
     public Flux<String> fromIterable() {
-        return null;
+        List<String> stringList = Arrays.asList("a", "b", "c", "d");
+        return Flux.fromIterable(stringList);
     }
 
     public Flux<String> fromStream() {
-        return null;
+        Stream<String> stringStream = Stream.of("a", "b", "c", "d");
+        return Flux.fromStream(stringStream);
     }
 
     public Flux<String> fromJust() {
-        return null;
+        return Flux.just("a", "b", "c", "d");
     }
 
     public Flux<String> generate() {
         return null;
     }
 
-    public Flux<String> interval() {
-        return null;
+    public Flux<Long> interval() {
+        return Flux.interval(Duration.of(1, ChronoUnit.SECONDS));
     }
 
-    public Flux<String> range() {
-        return null;
+    public Flux<Integer> range() {
+        return Flux.range(1, 15);
     }
 
     public Flux<String> defer() {
-        return null;
+        return Flux.defer(() -> Flux.just("1", "2", "3", "4"));
     }
 
-
-
     public static void main(String[] args) {
-        List<Integer> integerList = new ArrayList<>();
-        Flux.just(1,2,3,4)
-                //.log()
-                .subscribe(new Subscriber<Integer>() {
 
-                    private Subscription subscription;
-                    @Override
-                    public void onSubscribe(Subscription subscription) {
-                        this.subscription = subscription;
-                        //subscription.request(1);
-                        System.out.println("ready..");
-                    }
-                    @Override
-                    public void onNext(Integer integer) {
-                        System.out.println(integer + " requested..");
-                        subscription.request(1);
-                    }
-                    @Override
-                    public void onError(Throwable throwable) {
+        FluxGenerator fg = new FluxGenerator();
+        Flux<String> fff = fg.fromJust();
+        fff.subscribe(t -> System.out.println(t));
 
-                    }
-                    @Override
-                    public void onComplete() {
-                        System.out.println("end..");
-                    }
-                });
+//        List<Integer> integerList = new ArrayList<>();
+//        Flux.just(1,2,3,4)
+//                //.log()
+//                .subscribe(new Subscriber<Integer>() {
+//
+//                    private Subscription subscription;
+//                    @Override
+//                    public void onSubscribe(Subscription subscription) {
+//                        this.subscription = subscription;
+//                        //subscription.request(1);
+//                        System.out.println("ready..");
+//                    }
+//                    @Override
+//                    public void onNext(Integer integer) {
+//                        System.out.println(integer + " requested..");
+//                        subscription.request(1);
+//                    }
+//                    @Override
+//                    public void onError(Throwable throwable) {
+//
+//                    }
+//                    @Override
+//                    public void onComplete() {
+//                        System.out.println("end..");
+//                    }
+//                });
     }
 }
